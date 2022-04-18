@@ -1,9 +1,17 @@
+import { useRef, useEffect } from "react";
 import { useChat } from "../../contexts/chat.context";
 
 export const ChatHeader = () => {
   const chat = useChat();
   const contato = chat.participantes.find(p => !p.usuarioAtual);
+  const debounceId = useRef(0);
 
+  useEffect(() => {
+    console.log('renderizei ao carregar a página toda e não a cada nova msg')
+    clearTimeout(debounceId.current);
+    debounceId.current = window.setTimeout(()=>chat.setBuscaMensagem, 250);
+  },[])
+  
   return (
     <div className="flex sm:items-center justify-between py-3 border-b-2 border-gray-200">
       <div className="relative flex items-center space-x-4">
